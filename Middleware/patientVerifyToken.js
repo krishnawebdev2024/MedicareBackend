@@ -18,7 +18,7 @@ export const patientVerifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Log the decoded token to check if the ID is correct
-    console.log("Decoded Token is here:", decoded);
+    console.log("PatientVerifyToken-Decoded Token is here:", decoded);
 
     // Check if the ID in the token is valid
     const Id = decoded.id;
@@ -27,13 +27,13 @@ export const patientVerifyToken = async (req, res, next) => {
     }
     console.log("Id from middlewared user", Id);
     // Find the patient in the database using the ID from the token
-    const patient = await User.findById(Id);
-    if (!patient) {
+    const user = await User.findById(Id);
+    if (!user) {
       return next(new CustomError("Patient not found", 404));
     }
 
     // Attach the patient object to the request (req)
-    req.patient = patient;
+    req.user = user;
 
     // Proceed to the next middleware or route handler
     next();

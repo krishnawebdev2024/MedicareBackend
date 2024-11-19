@@ -165,7 +165,7 @@ export const loginUser = async (req, res, next) => {
     res.status(200).json({
       message: "Login successful",
       user: {
-        id: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -183,8 +183,10 @@ export const logoutUser = (req, res) => {
   res.status(200).json({ message: "Logout successful" });
 };
 
+// Check User Session
 export const checkSession = (req, res) => {
   if (req.user) {
+    console.log("req.user from controllers", req.user);
     res.json({ authenticated: true, user: req.user });
   } else {
     res.json({ authenticated: false });
