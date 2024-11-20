@@ -148,7 +148,7 @@ export const deleteAvailability = async (req, res, next) => {
 // 5. Create  Delete a particular availability slot
 export const deleteSlot = async (req, res, next) => {
   try {
-    const { availabilityId, slotId } = req.params; // availabilityId is the ID of the availability document, and slotId is the ID of the slot to be deleted
+    const { availabilityId, slotId } = req.params; // The availability document _id and the slot _id
 
     // Find the availability document by ID
     const doctorAvailability = await DoctorAvailability.findById(
