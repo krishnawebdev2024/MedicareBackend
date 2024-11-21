@@ -5,6 +5,7 @@ import {
   updateBookingStatus,
   getBookingsByDoctor,
   getBookingsByPatient,
+  getAllBookings,
   deleteBooking,
 } from "../scheduleControllers/bookingControllers.js";
 
@@ -21,6 +22,9 @@ bookingRouter.get("/doctor/:id", getBookingsByDoctor);
 
 // Get all bookings for a specific patient
 bookingRouter.get("/patient/:id", getBookingsByPatient);
+
+// Get all bookings
+bookingRouter.get("/", getAllBookings);
 
 // Delete booking by ID
 bookingRouter.delete("/:id", deleteBooking);

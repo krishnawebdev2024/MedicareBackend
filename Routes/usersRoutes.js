@@ -21,9 +21,9 @@ usersRouter.post(`/`, upload.single("image"), createUser);
 usersRouter.post(`/login`, loginUser);
 usersRouter.post(`/logout`, patientVerifyToken, logoutUser);
 usersRouter.get(`/session`, patientVerifyToken, checkSession);
-usersRouter.get(`/`, patientVerifyToken, getUsers);
-usersRouter.get(`/:id`, patientVerifyToken, getUserById);
-usersRouter.put(`/:id`, patientVerifyToken, updateUser);
-usersRouter.delete(`/:id`, patientVerifyToken, deleteUser);
+usersRouter.get(`/`, getUsers);
+usersRouter.get(`/:id`, getUserById);
+usersRouter.put(`/:id`, updateUser);
+usersRouter.delete(`/:id`, deleteUser);
 
 export default usersRouter;

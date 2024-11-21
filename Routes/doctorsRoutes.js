@@ -23,8 +23,8 @@ doctorsRouter.post(`/login`, loginDoctor);
 doctorsRouter.post(`/logout`, verifyToken, logoutDoctor);
 doctorsRouter.get(`/session`, verifyToken, checkSession);
 doctorsRouter.get(`/`, getDoctors);
-doctorsRouter.get(`/:id`, verifyToken, getDoctorById);
-doctorsRouter.put(`/:id`, verifyToken, updateDoctor);
-doctorsRouter.delete(`/:id`, verifyToken, deleteDoctor);
+doctorsRouter.get(`/:id`, getDoctorById);
+doctorsRouter.put(`/:id`, updateDoctor);
+doctorsRouter.delete(`/:id`, deleteDoctor);
 
 export default doctorsRouter;

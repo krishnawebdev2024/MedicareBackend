@@ -140,7 +140,26 @@ export const getBookingsByPatient = async (req, res, next) => {
   }
 };
 
-// 05- Delete booking by ID
+// 05- Get all bookings
+export const getAllBookings = async (req, res, next) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("doctorId", "name email") // Populate doctor details
+      .populate("patientId", "name email"); // Populate patient details
+
+    if (!bookings || bookings.length === 0) {
+      throw new CustomError("No bookings found", 404);
+    }
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    next(
+      new CustomError(error.message || "Failed to retrieve all bookings", 400)
+    );
+  }
+};
+
+// 06- Delete booking by ID
 export const deleteBooking = async (req, res, next) => {
   try {
     const bookingId = req.params.id;
