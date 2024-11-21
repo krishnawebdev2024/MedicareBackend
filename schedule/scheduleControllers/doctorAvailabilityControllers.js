@@ -60,6 +60,8 @@ export const getAvailabilityByDoctor = async (req, res, next) => {
   }
 };
 
+// 3. Update an availability slot
+
 export const updateAvailability = async (req, res) => {
   const { id } = req.params; // This is the doctor availability document _id
   const { availability } = req.body; // The data you want to update (date and slots)
