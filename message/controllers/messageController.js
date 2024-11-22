@@ -32,7 +32,11 @@ export const getAllMessages = async (req, res) => {
 
     // If no messages, return a message
     if (messages.length === 0) {
-      return res.status(404).json({ message: "No messages found" });
+      return res
+        .status(404)
+        .json({
+          message: "There is no any New Message available in your inbox",
+        });
     }
 
     // Send success response with messages
