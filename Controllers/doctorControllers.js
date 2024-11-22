@@ -64,8 +64,8 @@ export const createDoctor = async (req, res, next) => {
             name,
             email,
             password: hashedPassword,
-            role: role || "doctor", // Default to doctor if no role is provided
-            image: imageUrl[0], // Store the image URL
+            role: role || "doctor",
+            image: imageUrl[0],
           });
 
           await newDoctor.save();
@@ -82,7 +82,7 @@ export const createDoctor = async (req, res, next) => {
         name,
         email,
         password: hashedPassword,
-        role: role || "doctor", // Default to doctor if no role is provided
+        role: role || "doctor",
       });
       await newDoctor.save();
       res.status(201).json(newDoctor);

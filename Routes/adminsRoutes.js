@@ -11,6 +11,7 @@ import {
   logoutAdmin,
   checkSession,
 } from "../Controllers/adminControllers.js";
+import { adminVerifyToken } from "../Middleware/AdminVerifyToken.js";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -18,8 +19,8 @@ const adminsRouter = Router();
 
 adminsRouter.post(`/`, upload.single("image"), createAdmin);
 adminsRouter.post(`/login`, loginAdmin);
-adminsRouter.post(`/logout`, logoutAdmin);
-adminsRouter.get(`/session`, checkSession);
+adminsRouter.post(`/logout`, adminVerifyToken, logoutAdmin);
+adminsRouter.get(`/session`, adminVerifyToken, checkSession);
 adminsRouter.get(`/`, getAdmins);
 adminsRouter.get(`/:id`, getAdminById);
 adminsRouter.put(`/:id`, updateAdmin);

@@ -170,6 +170,7 @@ export const loginAdmin = async (req, res, next) => {
         name: admin.name,
         email: admin.email,
         role: admin.role,
+        image: admin.image,
       },
     });
   } catch (error) {
