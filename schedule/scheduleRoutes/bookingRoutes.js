@@ -9,6 +9,8 @@ import {
   deleteBooking,
 } from "../scheduleControllers/bookingControllers.js";
 
+import { adminVerifyToken } from "../../Middleware/AdminVerifyToken.js";
+
 const bookingRouter = Router();
 
 // Create a new booking

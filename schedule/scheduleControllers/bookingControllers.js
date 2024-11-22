@@ -76,7 +76,8 @@ export const createBooking = async (req, res, next) => {
   }
 };
 
-// 02- Update booking status
+// 02- Update booking status (for admin or doctor to confirm/cancel)
+
 export const updateBookingStatus = async (req, res, next) => {
   try {
     const bookingId = req.params.id;
@@ -96,11 +97,32 @@ export const updateBookingStatus = async (req, res, next) => {
       throw new CustomError("Booking not found", 404);
     }
 
+    // If the status is "cancelled", we need to update DoctorAvailability
+    if (status === "cancelled") {
+      const { doctorId, date } = updatedBooking; // Assuming you have these fields on the booking model
+
+      // Update the corresponding doctor's availability for the cancelled booking
+      await DoctorAvailability.updateMany(
+        {
+          doctorId: doctorId, // find the doctor
+          "availability.date": new Date(date), // match the booking date
+          "availability.slots.isBooked": true, // find booked slots
+        },
+        {
+          $set: { "availability.$[].slots.$[slot].isBooked": false }, // set isBooked to false
+        },
+        {
+          arrayFilters: [{ "slot.isBooked": true }], // filter for booked slots
+        }
+      );
+    }
+
     res.status(200).json(updatedBooking);
   } catch (error) {
     next(new CustomError(error.message || "Failed to update booking", 400));
   }
 };
+//function to update booking status
 
 // 03- Get all bookings for a specific doctor
 export const getBookingsByDoctor = async (req, res, next) => {
