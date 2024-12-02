@@ -13,6 +13,9 @@ import bookingRouter from "./schedule/scheduleRoutes/bookingRoutes.js";
 
 import messageRoutes from "./message/routes/messageRoutes.js";
 
+import apiRoutes from "./openAI/apiRoutes.js";
+import fileUploadRouter from "./pdfReport/routes/fileUploadRouter.js";
+
 import "./db.js";
 
 import { PORT, CLIENT_URL } from "./config/config.js";
@@ -35,6 +38,8 @@ app.use(`/api/v1/doctors`, doctorsRouter);
 app.use(`/api/v1/doctorAvailability`, doctorAvailabilityRouter);
 app.use(`/api/v1/bookings`, bookingRouter);
 app.use(`/api/v1/messages`, messageRoutes);
+app.use(`/api/v1/openAI`, apiRoutes);
+app.use(`/api/v1/fileUpload`, fileUploadRouter);
 
 app.get("*", (req, res) => {
   res.status(404).json({ message: "page not found!" });
@@ -43,5 +48,6 @@ app.get("*", (req, res) => {
 app.use(errorHandler);
 app.listen(PORT, () => {
   //console.log(`Server is running on port: ${PORT}`);
+
   console.log(`Server is running on http://localhost:${PORT}`);
 });

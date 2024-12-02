@@ -18,7 +18,7 @@ export const verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Log the decoded token to check if the ID is correct
-    console.log("Decoded Token is here:", decoded);
+    // console.log("Decoded Token is here:", decoded);
 
     // Check if the ID in the token is valid
     const doctorId = decoded.id;

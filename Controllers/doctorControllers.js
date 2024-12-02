@@ -190,7 +190,7 @@ export const logoutDoctor = (req, res) => {
 // 08- Check Doctor Session
 export const checkSession = (req, res) => {
   if (req.doctor) {
-    console.log("req.doctor from controllers", req.doctor);
+    //console.log("req.doctor from controllers", req.doctor);
     res.json({ authenticated: true, doctor: req.doctor });
   } else {
     res.json({ authenticated: false });

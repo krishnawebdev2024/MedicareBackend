@@ -10,6 +10,7 @@ import {
   loginUser,
   logoutUser,
   checkSession,
+  uploadPDF,
 } from "../Controllers/usersControllers.js";
 import { patientVerifyToken } from "../Middleware/patientVerifyToken.js";
 
@@ -25,5 +26,6 @@ usersRouter.get(`/`, getUsers);
 usersRouter.get(`/:id`, getUserById);
 usersRouter.put(`/:id`, updateUser);
 usersRouter.delete(`/:id`, deleteUser);
+usersRouter.post(`/upload-pdf`, uploadPDF);
 
 export default usersRouter;
