@@ -18,14 +18,14 @@ export const patientVerifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Log the decoded token to check if the ID is correct
-    console.log("PatientVerifyToken-Decoded Token is here:", decoded);
+    //console.log("PatientVerifyToken-Decoded Token is here:", decoded);
 
     // Check if the ID in the token is valid
     const Id = decoded.id;
     if (!mongoose.Types.ObjectId.isValid(Id)) {
       return next(new CustomError("Invalid patient ID", 400));
     }
-    console.log("Id from middlewared user", Id);
+    // console.log("Id from middlewared user", Id);
     // Find the patient in the database using the ID from the token
     const user = await User.findById(Id);
     if (!user) {

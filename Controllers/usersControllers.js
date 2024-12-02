@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import User from "../models/User.js";
 import { CustomError } from "../errorHandler.js";
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/config.js";
+import PDFRecord from "../models/PDFRecord.js";
 
 // Get all users
 export const getUsers = async (req, res, next) => {
@@ -186,9 +187,109 @@ export const logoutUser = (req, res) => {
 // Check User Session
 export const checkSession = (req, res) => {
   if (req.user) {
-    console.log("req.user from controllers", req.user);
+    //console.log("req.user from controllers", req.user);
     res.json({ authenticated: true, user: req.user });
   } else {
     res.json({ authenticated: false });
+  }
+};
+
+// Controller to upload PDF and save relevant data
+export const uploadPDF = async (req, res, next) => {
+  console.log("PDF upload request received");
+
+  try {
+    // Retrieve the token and PDF file from the request
+    const { token } = req.body; // You get the token from frontend, sent in the body
+    console.log("Token received:", token);
+
+    const pdfFile = req.file; // The uploaded file is part of `req.file` from multer/multer-storage
+
+    if (!token || !pdfFile) {
+      console.error("Token or PDF file not provided.");
+      throw new CustomError("Token or PDF file not provided", 400);
+    }
+
+    console.log("Token received:", token);
+    console.log("PDF file received:", pdfFile);
+
+    // Verify the JWT token
+    const userCredential = jwt.verify(token, process.env.JWT_SECRET); // Use your JWT_SECRET from env vars
+    console.log("JWT token verified:", userCredential);
+
+    // Find the user by the decoded token
+    const user = await User.findById(userCredential.id);
+    if (!user) {
+      console.error("User not found for the provided token.");
+      throw new CustomError("User not found", 404);
+    }
+
+    // Log the user data
+    console.log("User found:", user);
+
+    // Check if the file was actually uploaded
+    if (!pdfFile) {
+      console.error("No PDF file uploaded.");
+      throw new CustomError("No PDF file uploaded", 400);
+    }
+
+    // Handle the PDF upload to Firebase Storage
+    const blob = bucket.file(`pdfs/${Date.now()}_${pdfFile.originalname}`);
+    const blobStream = blob.createWriteStream({
+      metadata: {
+        contentType: pdfFile.mimetype,
+      },
+    });
+
+    console.log("Uploading PDF file to Firebase Storage...");
+
+    blobStream.on("error", (err) => {
+      console.error("Error during PDF upload:", err);
+      next(new CustomError("PDF upload failed", 500));
+    });
+
+    blobStream.on("finish", async () => {
+      console.log("PDF upload successful!");
+
+      try {
+        // Get the signed URL for the uploaded PDF file
+        const pdfUrl = await blob.getSignedUrl({
+          action: "read",
+          expires: "03-01-2500",
+        });
+
+        console.log("PDF URL generated:", pdfUrl);
+
+        // Save the PDF URL and related user information to the database
+        const pdfRecord = new PDFRecord({
+          pdfUrl: pdfUrl[0],
+          user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            image: user.image, // Assuming you have this field in the user model
+          },
+        });
+
+        await pdfRecord.save();
+        console.log("PDF record saved in database.");
+
+        // Send success response
+        res.status(201).json({
+          message: "PDF uploaded successfully",
+          pdfUrl: pdfUrl[0],
+        });
+      } catch (err) {
+        console.error("Error saving PDF or getting URL:", err);
+        next(new CustomError("Error saving PDF or getting URL", 500));
+      }
+    });
+
+    // Start the file stream upload
+    blobStream.end(pdfFile.buffer);
+  } catch (error) {
+    console.error("Error in uploadPDF controller:", error);
+    next(error); // Pass the error to the error-handling middleware
   }
 };
