@@ -1,12 +1,11 @@
 import fs from "fs";
 import multer from "multer";
 import path from "path";
-
 import PDFParser from "pdf2json"; // Import pdf2json
 import openaiService from "../../openAI/openaiService.js";
 
-import os from "os";
-const uploadDirectory = path.join(os.tmpdir(), "uploads");
+const uploadDirectory =
+  "/Users/radhakrishnansivapalan/Desktop/createUserServer/pdfReport/controllers/uploads";
 
 // Ensure the uploads folder exists
 if (!fs.existsSync(uploadDirectory)) {
