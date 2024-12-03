@@ -34,10 +34,10 @@ const openaiService = async (reportData, question, isProduction = false) => {
           { role: "system", content: "You are a helpful assistant." }, // Instruction for the model
           {
             role: "user",
-            content: `${userMessage}, What are the key health indicators I should monitor based on my Doctor report:\n\n${reportData}`,
+            content: `${userMessage}, What are the key health indicators I should monitor based on my Blood Report:\n\n${reportData}`,
           }, // User input
         ],
-        max_tokens: 100, // Adjust based on expected response length
+        max_tokens: 300, // Adjust based on expected response length
         temperature: 0.5, // Control randomness of the response
       },
       {
