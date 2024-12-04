@@ -183,8 +183,18 @@ export const loginUser = async (req, res, next) => {
 };
 
 // User Logout
+//export const logoutUser = (req, res) => {
+//  res.clearCookie("token");
+//  res.status(200).json({ message: "Logout successful" });
+//};
+
 export const logoutUser = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+  });
   res.status(200).json({ message: "Logout successful" });
 };
 
