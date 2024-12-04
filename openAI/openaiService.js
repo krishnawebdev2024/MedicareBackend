@@ -2,7 +2,7 @@ import axios from "axios";
 import { OPENAI_API_KEY } from "../config/config.js";
 
 // Function to interact with OpenAI API
-const openaiService = async (reportData, question, isProduction = false) => {
+const openaiService = async (reportData, question, isProduction = true) => {
   // Mock response when not in production mode
   if (!isProduction) {
     console.log("Dry run mode: Skipping OpenAI API call.");
@@ -34,10 +34,10 @@ const openaiService = async (reportData, question, isProduction = false) => {
           { role: "system", content: "You are a helpful assistant." }, // Instruction for the model
           {
             role: "user",
-            content: `${userMessage}, What are the key health indicators I should monitor based on my Blood Report:\n\n${reportData}`,
+            content: `${userMessage}, What are the key health indicators I should monitor based on my Blood Report,analyze the report and also suggest me the food that I should eat and any exercise that I should do and the very important thing that i should be taking  into consideration from the report:\n\n${reportData}`,
           }, // User input
         ],
-        max_tokens: 300, // Adjust based on expected response length
+        max_tokens: 400, // Adjust based on expected response length
         temperature: 0.5, // Control randomness of the response
       },
       {
