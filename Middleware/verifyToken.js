@@ -25,7 +25,7 @@ export const verifyToken = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(doctorId)) {
       return next(new CustomError("Invalid doctor ID", 400));
     }
-    console.log("dotorid from middleware doctor", doctorId);
+    //console.log("dotorid from middleware doctor", doctorId);
     // Find the doctor in the database using the ID from the token
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
