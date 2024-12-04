@@ -163,6 +163,10 @@ export const loginDoctor = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -182,8 +186,17 @@ export const loginDoctor = async (req, res, next) => {
 };
 
 // 07- Doctor Logout
+//export const logoutDoctor = (req, res) => {
+//  res.clearCookie("token");
+//  res.status(200).json({ message: "Logout successful" });
+//};
 export const logoutDoctor = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+  });
   res.status(200).json({ message: "Logout successful" });
 };
 
