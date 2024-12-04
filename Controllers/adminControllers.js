@@ -160,6 +160,10 @@ export const loginAdmin = async (req, res, next) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -179,8 +183,17 @@ export const loginAdmin = async (req, res, next) => {
 };
 
 // Admin Logout
+//export const logoutAdmin = (req, res) => {
+//  res.clearCookie("token");
+//  res.status(200).json({ message: "Logout //successful" });
+//};
 export const logoutAdmin = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/",
+  });
   res.status(200).json({ message: "Logout successful" });
 };
 

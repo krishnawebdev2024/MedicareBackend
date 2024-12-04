@@ -2,6 +2,8 @@ import express, { json } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import path from "path";
+
 import { errorHandler } from "./errorHandler.js";
 
 import usersRouter from "./Routes/usersRoutes.js";
@@ -41,13 +43,16 @@ app.use(`/api/v1/messages`, messageRoutes);
 app.use(`/api/v1/openAI`, apiRoutes);
 app.use(`/api/v1/fileUpload`, fileUploadRouter);
 
+//app.get("*", (req, res) => {
+//  res.status(404).json({ message: "page not found!buddy" });
+//});
+
+// Catch-All Route for React App (SPA - Single Page Application)
 app.get("*", (req, res) => {
-  res.status(404).json({ message: "page not found!" });
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.use(errorHandler);
 app.listen(PORT, () => {
-  //console.log(`Server is running on port: ${PORT}`);
-
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
